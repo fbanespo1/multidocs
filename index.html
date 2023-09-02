@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Search and Summarize</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Document Search and Summarize</h1>
+
+    <!-- Dropdown for Blob container selection -->
+    <select id="containerSelect">
+        <option value="container1">Container 1</option>
+        <option value="container2">Container 2</option>
+        <option value="container3">Container 3</option>
+    </select>
+
+    <!-- Search Box -->
+    <input type="text" id="searchQuery" placeholder="Search documents...">
+
+    <!-- Search Button -->
+    <button onclick="searchDocuments()">Search</button>
+
+    <!-- Summary Button -->
+    <button onclick="summarizeDocument()">Summarize</button>
+
+    <!-- Results Area -->
+    <div id="results"></div>
+
+    <!-- JavaScript to handle AJAX -->
+    <script>
+        function searchDocuments() {
+            const query = $('#searchQuery').val();
+            const container = $('#containerSelect').val();
+            $.get(`/search?query=${query}&container_name=${container}`, function(data) {
+                // Display results
+                $('#results').html(JSON.stringify(data));
+            });
+        }
+
+        function summarizeDocument() {
+            const content = $('#results').text();
+            $.post('/summarize', {content: content}, function(data) {
+                // Display summary
+                $('#results').html('Summary: ' + JSON.stringify(data));
+            });
+        }
+    </script>
+
+</body>
+</html>
